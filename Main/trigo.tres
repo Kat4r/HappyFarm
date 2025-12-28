@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlantData" load_steps=2 format=3 uid="uid://c41kyowifiqot"]
+
+[ext_resource type="Script" uid="uid://di1kdek7cn01y" path="res://Main/PlantData.gd" id="1_fx1ic"]
+
+[resource]
+script = ExtResource("1_fx1ic")
+nome_exibicao = "Trigo"
+tempo_crescimento_total = 480
+estagios_visuais = Array[Vector2i]([Vector2i(3, 0), Vector2i(4, 0), Vector2i(5, 0), Vector2i(6, 0)])
+metadata/_custom_type_script = "uid://di1kdek7cn01y"

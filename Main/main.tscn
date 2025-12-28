@@ -1,0 +1,194 @@
+[gd_scene load_steps=18 format=3 uid="uid://0d5l53ikg26m"]
+
+[ext_resource type="Script" uid="uid://bpq4kmtqkuakd" path="res://Main/Camera.gd" id="1_qac2q"]
+[ext_resource type="Texture2D" uid="uid://dgol1n3yvvfaq" path="res://imagens/spreedsheet128.png" id="1_rj11h"]
+[ext_resource type="Script" uid="uid://coddhprwk6eep" path="res://Main/FarmGrid.gd" id="4_f6fdm"]
+[ext_resource type="Texture2D" uid="uid://rnpkhp5b3umx" path="res://imagens/cursorhighlight.png" id="4_k3v36"]
+[ext_resource type="Script" uid="uid://0tg0jmcls2cy" path="res://Main/CursorController.gd" id="5_liyct"]
+[ext_resource type="Resource" uid="uid://c41kyowifiqot" path="res://Main/trigo.tres" id="5_rj11h"]
+[ext_resource type="Texture2D" uid="uid://b7p6s5eu04yuj" path="res://imagens/icons_ui/enxada.png" id="6_f6fdm"]
+[ext_resource type="Script" uid="uid://dkl3m6ygq756m" path="res://Main/InventarioUI.gd" id="6_rj11h"]
+[ext_resource type="Script" uid="uid://o1wpvg6c4mra" path="res://Main/UIManager.gd" id="7_f3gf5"]
+[ext_resource type="Texture2D" uid="uid://jen0aebn0q20" path="res://imagens/icons_ui/sementes.png" id="7_rj11h"]
+[ext_resource type="Texture2D" uid="uid://cqessjq8q40yh" path="res://imagens/icons_ui/mao.png" id="8_qac2q"]
+[ext_resource type="Script" uid="uid://cdq8jde0w8h5i" path="res://Main/TimeSystem.gd" id="11_o60nc"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qac2q"]
+texture = ExtResource("1_rj11h")
+margins = Vector2i(0, 2)
+texture_region_size = Vector2i(128, 94)
+1:0/0 = 0
+0:0/next_alternative_id = 2
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/modulate = Color(0.40069774, 0.40069774, 0.40069768, 1)
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_rix8b"]
+tile_shape = 1
+tile_size = Vector2i(128, 64)
+sources/0 = SubResource("TileSetAtlasSource_qac2q")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f3gf5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 17
+border_width_top = 17
+border_width_right = 17
+border_width_bottom = 17
+border_color = Color(1, 0.011764706, 0, 0.7372549)
+border_blend = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qac2q"]
+
+[sub_resource type="Environment" id="Environment_qac2q"]
+
+[node name="Main" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(350, 0)
+position_smoothing_enabled = true
+script = ExtResource("1_qac2q")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." node_paths=PackedStringArray("sistema_tempo")]
+y_sort_enabled = true
+tile_set = SubResource("TileSet_rix8b")
+script = ExtResource("4_f6fdm")
+sistema_tempo = NodePath("../CicloDiaNoite")
+semente_atual = ExtResource("5_rj11h")
+
+[node name="CursorHighlight" type="Sprite2D" parent="TileMapLayer" node_paths=PackedStringArray("tilemap_ref")]
+z_index = 10
+scale = Vector2(2, 2)
+texture = ExtResource("4_k3v36")
+script = ExtResource("5_liyct")
+tilemap_ref = NodePath("..")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("sistema_tempo")]
+script = ExtResource("7_f3gf5")
+sistema_tempo = NodePath("../CicloDiaNoite")
+
+[node name="MolduraPausa" type="Panel" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f3gf5")
+
+[node name="BtnPausa" type="Button" parent="CanvasLayer"]
+offset_left = 1103.0
+offset_top = 653.0
+offset_right = 1222.0
+offset_bottom = 684.0
+focus_mode = 0
+text = "Pausar Tempo"
+
+[node name="LabelRelogio" type="Label" parent="CanvasLayer"]
+offset_left = 610.0
+offset_top = 16.0
+offset_right = 704.0
+offset_bottom = 39.0
+text = "Dia 1 - --:--"
+
+[node name="LabelMoedas" type="Label" parent="CanvasLayer"]
+offset_left = 1145.0
+offset_top = 9.0
+offset_right = 1270.0
+offset_bottom = 61.0
+theme_override_font_sizes/font_size = 18
+text = "Moedas: --"
+
+[node name="UIManager" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("painel_inventario", "painel_loja", "grid_inventario", "grid_loja", "label_moedas")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 36.0
+offset_top = 17.0
+offset_right = 76.0
+offset_bottom = 57.0
+script = ExtResource("6_rj11h")
+painel_inventario = NodePath("InventarioUI")
+painel_loja = NodePath("LojaUI")
+grid_inventario = NodePath("InventarioUI/GridContainer")
+grid_loja = NodePath("LojaUI/GridContainer")
+label_moedas = NodePath("../LabelMoedas")
+
+[node name="InventarioUI" type="Panel" parent="CanvasLayer/UIManager"]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 86.0
+offset_right = 67.0
+offset_bottom = 126.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qac2q")
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/UIManager/InventarioUI"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = -62.0
+offset_right = 39.0
+offset_bottom = -22.0
+columns = 10
+
+[node name="LojaUI" type="Panel" parent="CanvasLayer/UIManager"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 25.0
+offset_right = 66.0
+offset_bottom = 65.0
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/UIManager/LojaUI"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 63.0
+offset_right = 41.0
+offset_bottom = 103.0
+columns = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -92.0
+offset_right = 77.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BtnEnxada" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("6_f6fdm")
+
+[node name="BtnSemente" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("7_rj11h")
+
+[node name="BtnMao" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("8_qac2q")
+
+[node name="BtnExpandir" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Comprar terra (100R$)"
+
+[node name="CicloDiaNoite" type="CanvasModulate" parent="."]
+script = ExtResource("11_o60nc")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="CicloDiaNoite"]
+environment = SubResource("Environment_qac2q")
+
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnEnxada" to="TileMapLayer" method="_on_btn_enxada_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnSemente" to="TileMapLayer" method="_on_btn_semente_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnMao" to="TileMapLayer" method="_on_btn_mao_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnExpandir" to="TileMapLayer" method="_on_btn_expandir_pressed"]
